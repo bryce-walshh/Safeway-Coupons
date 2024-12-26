@@ -5,13 +5,19 @@ from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import undetected_chromedriver as uc
+
 
 with open("logininfo.txt", "r") as file:
     lines = file.readlines()
     phone_num = lines[0].strip() 
     password = lines[1].strip()
 
-driver = webdriver.Chrome(ChromeDriverManager().install())
+options = webdriver.ChromeOptions() 
+#options.add_argument("start-maximized")
+driver = uc.Chrome(options=options)
+
+#driver = webdriver.Chrome(ChromeDriverManager().install())
 
 driver.get("https://www.safeway.com/foru/coupons-deals.html")
 
@@ -34,11 +40,12 @@ finally:
 password_inp = driver.find_element(By.ID, 'password')
 password_inp.send_keys(password)
 
-time.sleep(5)
+#password_inp.send_key(Keys.RETURN)
 
-password_inp.send_key(Keys.RETURN)
+sign_in_button = driver.find_element(By.XPATH, "//button[text()=' Sign In ']")
+sign_in_button.click()
 
 
-time.sleep(5)
+time.sleep(20)
 
 driver.quit()
