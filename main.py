@@ -56,18 +56,32 @@ while(more_to_load):
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Load more']")))
         driver.find_element(By.XPATH, "//button[text()='Load more']").click()
-        time.sleep(15)
+        time.sleep(5)
 
     finally:
         print("Finished!")
         more_to_load = False
     
 
+# Keep clipping Coupons
+
 clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
 
-for coupon in clip_coupon_buttons:
-    coupon.click()
-    time.sleep(3)
+finished = False
+
+while not finished:
+
+    for coupon in clip_coupon_buttons:
+        driver.execute_script("arguments[0].click();", coupon)
+        time.sleep(1)
+    
+    # Check to see if more coupons have loaded onto the page
+    try:
+        clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
+
+    except:
+        finished = True
+
 
 time.sleep(5)
 
