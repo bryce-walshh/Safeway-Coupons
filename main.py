@@ -7,6 +7,13 @@ from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
 import time
 
+import json
+from llamaapi import LlamaAPI
+
+# Have user to choose their preferences 
+import easygui
+couponPref = easygui.enterbox("What deals are you looking for? (Meat, Tootpaste, etc.):")
+
 
 with open("logininfo.txt", "r") as file:
     lines = file.readlines()
@@ -67,6 +74,10 @@ while(more_to_load):
 
 clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
 
+couponsDetails = driver.find_elements(By.XPATH, "//div[contains(@class, 'cpn-details')]")
+
+coupon_details_arr = []
+
 finished = False
 
 while not finished:
@@ -75,13 +86,22 @@ while not finished:
         driver.execute_script("arguments[0].click();", coupon)
         time.sleep(1)
     
+    for desc in couponsDetails:
+        coupon_details_arr.append(desc.text)
+
     # Check to see if more coupons have loaded onto the page
+
+    # COMMENTED OUT FOR TESTING
     try:
         clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
+        couponsDetails = driver.find_elements(By.CLASS_NAME, "cpn-details")
 
     except:
         finished = True
 
+    finished = True
+
+print(coupon_details_arr)
 
 time.sleep(5)
 
