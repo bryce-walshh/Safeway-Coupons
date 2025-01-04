@@ -24,7 +24,7 @@ with open("logininfo.txt", "r") as file:
     api_key = lines[2].strip()
 
 options = webdriver.ChromeOptions() 
-#options.add_argument("start-maximized")
+options.add_argument("start-minimized")
 driver = uc.Chrome(options=options)
 
 #driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -45,8 +45,9 @@ try:
         EC.presence_of_element_located((By.ID, 'password'))
     )
 finally:
-    print(driver.title)
+    #print(driver.title)
     #driver.quit()
+    done = True # random thing for finally syntax
 
 
 password_inp = driver.find_element(By.ID, 'password')
@@ -69,7 +70,7 @@ while(more_to_load):
         time.sleep(5)
 
     finally:
-        print("Finished!")
+        #print("Finished!")
         more_to_load = False
     
 
@@ -115,7 +116,7 @@ completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": f"Please give me the top 3 deals from this list: {coupon_details_arr}"
+            "content": f"Please give me the top 5 deals from this list: {coupon_details_arr}. Summarize the deals, and do not include any extraneous output such as an introduction."
         }
     ],
     temperature=1,
@@ -125,7 +126,7 @@ completion = client.chat.completions.create(
     stop=None,
 )
 
-print(completion.choices[0].message)
+print(completion.choices[0].message.content + '\n')
 
 time.sleep(5)
 
