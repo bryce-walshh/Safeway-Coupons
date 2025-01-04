@@ -6,19 +6,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
 import time
+from groq import Groq
 
 import json
-from llamaapi import LlamaAPI
+# from llamaapi import LlamaAPI
 
 # Have user to choose their preferences 
-import easygui
-couponPref = easygui.enterbox("What deals are you looking for? (Meat, Tootpaste, etc.):")
+
+# import easygui
+# couponPref = easygui.enterbox("What deals are you looking for? (Meat, Tootpaste, etc.):")
 
 
 with open("logininfo.txt", "r") as file:
     lines = file.readlines()
     phone_num = lines[0].strip() 
     password = lines[1].strip()
+    api_key = lines[2].strip()
 
 options = webdriver.ChromeOptions() 
 #options.add_argument("start-maximized")
@@ -82,9 +85,9 @@ finished = False
 
 while not finished:
 
-    for coupon in clip_coupon_buttons:
-        driver.execute_script("arguments[0].click();", coupon)
-        time.sleep(1)
+    # for coupon in clip_coupon_buttons:
+    #     driver.execute_script("arguments[0].click();", coupon)
+    #     time.sleep(1)
     
     for desc in couponsDetails:
         coupon_details_arr.append(desc.text)
@@ -92,16 +95,37 @@ while not finished:
     # Check to see if more coupons have loaded onto the page
 
     # COMMENTED OUT FOR TESTING
-    try:
-        clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
-        couponsDetails = driver.find_elements(By.CLASS_NAME, "cpn-details")
+    # try:
+    #     clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
+    #     couponsDetails = driver.find_elements(By.CLASS_NAME, "cpn-details")
 
-    except:
-        finished = True
+    # except:
+    #     finished = True
 
     finished = True
 
-print(coupon_details_arr)
+coupon_details_arr = str(coupon_details_arr)
+
+#print(coupon_details_arr)
+
+# LLM API Call to summarize best deals
+client = Groq(api_key=api_key)
+completion = client.chat.completions.create(
+    model="llama3-70b-8192",
+    messages=[
+        {
+            "role": "user",
+            "content": f"Please give me the top 3 deals from this list: {coupon_details_arr}"
+        }
+    ],
+    temperature=1,
+    max_tokens=1024,
+    top_p=1,
+    stream=False,
+    stop=None,
+)
+
+print(completion.choices[0].message)
 
 time.sleep(5)
 

@@ -1,2 +1,2 @@
 # Safeway-Coupons
-Ran to select all digital coupons on Safeway
+Run to select all digital coupons on Safeway
