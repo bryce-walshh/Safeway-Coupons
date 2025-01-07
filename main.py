@@ -7,14 +7,23 @@ from selenium.webdriver.support import expected_conditions as EC
 import undetected_chromedriver as uc
 import time
 from groq import Groq
+import gui
+from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLineEdit, QPushButton, QLabel
 
-import json
+import sys
 # from llamaapi import LlamaAPI
 
 # Have user to choose their preferences 
 
 # import easygui
 # couponPref = easygui.enterbox("What deals are you looking for? (Meat, Tootpaste, etc.):")
+app = QApplication(sys.argv)
+popup = gui.InputPopup()
+if popup.exec():  # If the dialog is accepted
+    print(f"User input: {popup.get_input()}")
+else:
+    print("User canceled the input.")
+
 
 
 with open("logininfo.txt", "r") as file:
@@ -24,7 +33,7 @@ with open("logininfo.txt", "r") as file:
     api_key = lines[2].strip()
 
 options = webdriver.ChromeOptions() 
-options.add_argument("start-minimized")
+#options.add_argument("start-minimized")
 driver = uc.Chrome(options=options)
 
 #driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -63,7 +72,10 @@ time.sleep(5)
 
 # Logic to close popups
 driver.find_element(By.CLASS_NAME, "onetrust-close-btn-handler").click()
-driver.find_element(By.ID, 'onboardingCloseButton')
+try:
+    driver.find_element(By.ID, 'onboardingCloseButton').click()
+except:
+    print("No onboarding btn, cnt.")
 
 
 time.sleep(1)
@@ -127,3 +139,6 @@ print(completion.choices[0].message.content + '\n')
 time.sleep(5)
 
 driver.quit()
+app.quit()
+sys.exit()
+
