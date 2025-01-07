@@ -25,6 +25,8 @@ if popup.exec():
 else:
     preferences = "No preferences, I just want the best overall deals."
 
+# TODO: Add prompt for login info if it does not already exist 
+
 # -- READ IN USER DATA --
 with open("logininfo.txt", "r") as file:
     lines = file.readlines()
@@ -84,6 +86,7 @@ driver.find_element(By.XPATH, "//button[text()='Load more']").click()
 
 clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
 
+# TODO: Add additional information on each of the coupons
 couponsDetails = driver.find_elements(By.XPATH, "//div[contains(@class, 'cpn-details')]")
 
 coupon_details_arr = []
@@ -135,6 +138,8 @@ completion = client.chat.completions.create(
 print(completion.choices[0].message.content + '\n')
 
 time.sleep(5)
+
+# TODO: Add some sort of saving of coupons until they expire
 
 driver.quit()
 app.quit()
