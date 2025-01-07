@@ -9,23 +9,23 @@ import time
 from groq import Groq
 import gui
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLineEdit, QPushButton, QLabel
-
 import sys
-# from llamaapi import LlamaAPI
 
-# Have user to choose their preferences 
-
-# import easygui
-# couponPref = easygui.enterbox("What deals are you looking for? (Meat, Tootpaste, etc.):")
+# -- USER DEAL CUSTOMIZATION --
 app = QApplication(sys.argv)
 popup = gui.InputPopup()
-if popup.exec():  # If the dialog is accepted
-    print(f"User input: {popup.get_input()}")
+preferences = ''
+
+# Handling the user input
+if popup.exec():  
+    if popup.get_input() == '':
+        preferences = "No preferences, I just want the best overall deals."
+    else:
+        preferences = popup.get_input()
 else:
-    print("User canceled the input.")
+    preferences = "No preferences, I just want the best overall deals."
 
-
-
+# -- READ IN USER DATA --
 with open("logininfo.txt", "r") as file:
     lines = file.readlines()
     phone_num = lines[0].strip() 
@@ -54,8 +54,6 @@ try:
         EC.presence_of_element_located((By.ID, 'password'))
     )
 finally:
-    #print(driver.title)
-    #driver.quit()
     done = True # random thing for finally syntax
 
 
@@ -124,7 +122,7 @@ completion = client.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": f"Please give me the top 5 deals from this list: {coupon_details_arr}. Summarize the deals, and do not include any extraneous output such as an introduction."
+            "content": f"Please give me the top 5 deals in these cateogries {preferences} from this list of these coupons: {coupon_details_arr}. Summarize the deals, and do not include any extraneous output such as an introduction."
         }
     ],
     temperature=1,

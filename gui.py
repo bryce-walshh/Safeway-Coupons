@@ -5,7 +5,7 @@ class InputPopup(QDialog):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Input Popup")
+        self.setWindowTitle("What deals are you looking for today?")
         self.setMinimumSize(300, 150)
 
         # Layout
@@ -13,8 +13,8 @@ class InputPopup(QDialog):
 
         # Input field
         self.input_field = QLineEdit(self)
-        self.input_field.setPlaceholderText("Enter your input here...")
-        layout.addWidget(QLabel("Please enter some text:"))
+        self.input_field.setPlaceholderText("Meats, Razors, etc.")
+        layout.addWidget(QLabel("List the items you're looking for deals on:"))
         layout.addWidget(self.input_field)
 
         # Buttons
