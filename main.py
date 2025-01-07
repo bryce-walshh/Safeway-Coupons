@@ -61,6 +61,13 @@ sign_in_button.click()
 # -- Clicking Coupons --
 time.sleep(15)
 
+cookies_button = driver.find_element(By.CLASS_NAME, "onetrust-close-btn-handler")
+
+cookies_button.click()
+
+time.sleep(5)
+
+
 more_to_load = True
 
 while(more_to_load):
