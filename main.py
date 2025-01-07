@@ -59,28 +59,17 @@ sign_in_button = driver.find_element(By.XPATH, "//button[text()=' Sign In ']")
 sign_in_button.click()
 
 # -- Clicking Coupons --
-time.sleep(15)
-
-cookies_button = driver.find_element(By.CLASS_NAME, "onetrust-close-btn-handler")
-
-cookies_button.click()
-
 time.sleep(5)
 
+# Logic to close popups
+driver.find_element(By.CLASS_NAME, "onetrust-close-btn-handler").click()
+driver.find_element(By.ID, 'onboardingCloseButton')
 
-more_to_load = True
 
-while(more_to_load):
-    try:
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//button[text()='Load more']")))
-        driver.find_element(By.XPATH, "//button[text()='Load more']").click()
-        time.sleep(5)
+time.sleep(1)
 
-    finally:
-        #print("Finished!")
-        more_to_load = False
+driver.find_element(By.XPATH, "//button[text()='Load more']").click()
     
-
 # Keep clipping Coupons
 
 clip_coupon_buttons = driver.find_elements(By.XPATH, "//button[text()=' Clip Coupon ']")
